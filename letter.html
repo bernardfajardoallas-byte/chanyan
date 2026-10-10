@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Photos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:        #d9edfb;
+    --sky-mid:    #8fc5ea;
+    --sky-deep:   #2f6690;
+    --sky-ink:    #1c3d54;
+    --paper:      #fdfdfb;
+    --shadow:     rgba(28,61,84,0.22);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background: var(--sky);
+    font-family:'Work Sans', sans-serif;
+    color:var(--sky-ink);
+  }
+
+  main{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 36px 24px 80px;
+    opacity: 0;
+    animation: rise 0.8s ease forwards 0.1s;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(24px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .title{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: var(--sky-deep);
+    text-align:center;
+    margin: 0 0 8px;
+  }
+
+  .video-container{
+    width:min(100%, 430px, calc(50vh - 12px));
+    aspect-ratio:9 / 16;
+    margin:0 auto 40px;
+    overflow:hidden;
+    border:1px solid rgba(47,102,144,0.2);
+    border-radius:8px;
+    background:#142a37;
+    box-shadow:0 24px 50px -24px var(--shadow);
+  }
+
+  .video-container video{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
+
+  .subtitle{
+    text-align:center;
+    font-size: 0.92rem;
+    color: var(--sky-deep);
+    opacity: 0.75;
+    margin: 0 0 48px;
+  }
+
+  .section-title{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.6vw, 2rem);
+    color: var(--sky-deep);
+    text-align:center;
+    margin: 100px 0 10px;
+  }
+
+  .section-hint{
+    text-align:center;
+    font-size: 0.85rem;
+    color: var(--sky-deep);
+    opacity: 0.65;
+    margin: 0 0 40px;
+  }
+
+  .music-section{
+    margin:0 auto 40px;
+    padding:36px 0;
+    color:var(--sky-deep);
+    text-align:center;
+    border-top:1px solid rgba(47,102,144,0.22);
+    border-bottom:1px solid rgba(47,102,144,0.22);
+  }
+
+  .music-section h2{
+    margin:0 0 22px;
+    font-family:'Fraunces', serif;
+    font-size:clamp(1.5rem, 3.6vw, 2rem);
+    font-style:italic;
+    font-weight:400;
+    line-height:1.35;
+  }
+
+  .music-box{
+    width:min(100%, 400px);
+    margin:0 auto;
+  }
+
+  .music-box iframe{
+    display:block;
+    width:100%;
+    aspect-ratio:16 / 9;
+    border:0;
+    border-radius:8px;
+    background:#17131d;
+    box-shadow:0 12px 28px rgba(50,28,77,0.22);
+  }
+
+  /* ---------- photo gallery: click a box to flip it ---------- */
+  .gallery{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 22px;
+  }
+
+  @media (max-width: 780px){
+    .gallery{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 420px){
+    .gallery{ grid-template-columns: 1fr; }
+  }
+
+  .box{
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .box-inner{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(.2,.75,.25,1);
+  }
+
+  .box.flipped .box-inner{
+    transform: rotateY(180deg);
+  }
+
+  .box-face{
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 24px -14px var(--shadow);
+  }
+
+  /* front: the photo */
+  .box-front{
+    background: #fff;
+    padding: 10px;
+  }
+
+  .box-front .frame{
+    width:100%;
+    height:100%;
+    border-radius: 5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(135deg, var(--sky) 0%, #eef7fd 100%);
+    color: var(--sky-deep);
+  }
+
+  .box-front .frame svg{ width: 34px; height: 34px; opacity: 0.4; }
+
+  .box-front .frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  /* back: a short letter */
+  .box-back{
+    background: var(--paper);
+    transform: rotateY(180deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 16px;
+    border: 1px solid rgba(47,102,144,0.15);
+  }
+
+  .box-back p{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #2a4a5f;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ---------- messy stack of letters ---------- */
+  .stack-wrap{
+    position: relative;
+    max-width: 380px;
+    height: 290px;
+    margin: 0 auto;
+    user-select: none;
+  }
+
+  .letter{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 320px;
+    height: 210px;
+    margin: -105px 0 0 -160px;
+    background: var(--paper);
+    border-radius: 6px;
+    box-shadow: 0 14px 26px -12px var(--shadow);
+    padding: 22px 24px;
+    box-sizing: border-box;
+    cursor: pointer;
+    overflow-y: auto;
+    transition: transform 0.45s cubic-bezier(.3,.6,.3,1), box-shadow 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sky-mid) transparent;
+  }
+  
+  @media (max-width: 375px){
+    .letter{
+      width: calc(100vw - 56px);
+      margin-left: calc((56px - 100vw) / 2);
+    }
+  }
+
+  .letter::-webkit-scrollbar{ width: 6px; }
+  .letter::-webkit-scrollbar-thumb{ background: var(--sky-mid); border-radius: 6px; }
+  .letter::-webkit-scrollbar-track{ background: transparent; }
+
+  .letter p{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: #2a4a5f;
+    margin: 0;
+  }
+
+  .letter.lifting{
+    box-shadow: 0 30px 50px -14px var(--shadow);
+  }
+
+  .stack-hint{
+    text-align:center;
+    font-size: 0.8rem;
+    color: var(--sky-deep);
+    opacity: 0.6;
+    margin-top: 18px;
+  }
+
+  .back-link{
+    display:block;
+    text-align:center;
+    margin-top: 60px;
+    font-size: 0.85rem;
+    letter-spacing:0.03em;
+    color: var(--sky-deep);
+    opacity:0.75;
+    text-decoration:none;
+  }
+  .back-link:hover{ opacity:1; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<main>
+  <h1 class="title">Flowers for You</h1>
+  <div class="video-container">
+    <!-- Put your MP4 beside letter.html, then replace your-video.mp4 with its filename. -->
+    <video autoplay muted playsinline loop preload="auto" aria-label="Flowers for you">
+      <source src="tulip.MP4" type="video/mp4">
+    </video>
+  </div>
+
+  <section class="music-section" aria-labelledby="music-title">
+    <h2 id="music-title">Song for You</h2>
+    <div class="music-box">
+      <iframe
+        src="https://www.youtube.com/embed/8hJJ2l8UaxQ"
+        title="Song for You"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <h1 class="title">A Few Moments</h1>
+  <p class="subtitle">little pieces of us, worth remembering</p>
+
+  <div class="gallery" id="gallery">
+    <!-- Put photos beside letter.html, then replace each filename below. PNG, JPG, and JPEG are supported. -->
+    <!-- Each .box flips on click to reveal a short letter on the back. Duplicate a .box block to add more photos. -->
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="1.jpeg" alt="Memory 1"></div></div>
+        <div class="box-face box-back"><p>I love your smile.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="2.jpeg" alt="Memory 2"></div></div>
+        <div class="box-face box-back"><p>I love you because I can be myself around you.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="3.jpeg" alt="Memory 3"></div></div>
+        <div class="box-face box-back"><p>I love your random updates.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="4.jpeg" alt="Memory 4"></div></div>
+        <div class="box-face box-back"><p>I love your eyes.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="5.jpeg" alt="Memory 5"></div></div>
+        <div class="box-face box-back"><p>I love your patience with me.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="6.jpeg" alt="Memory 6"></div></div>
+        <div class="box-face box-back"><p>I love your hugs.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="7.jpeg" alt="Memory 7"></div></div>
+        <div class="box-face box-back"><p>I love your uniqueness.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="8.JPG" alt="Memory 8"></div></div>
+        <div class="box-face box-back"><p>I love your kindness.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="9.jpeg" alt="Memory 9"></div></div>
+        <div class="box-face box-back"><p>I love your kisses.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="10.jpeg" alt="Memory 10"></div></div>
+        <div class="box-face box-back"><p>I love your personality.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="11.jpeg" alt="Memory 11"></div></div>
+        <div class="box-face box-back"><p>I love you because you are you.</p></div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-inner">
+        <div class="box-face box-front"><div class="frame"><img src="12.jpeg" alt="Memory 12"></div></div>
+        <div class="box-face box-back"><p>I love the way you became part of my life.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">A Few Short Letters</h2>
+  <p class="section-hint">tap the top one</p>
+
+  <div class="stack-wrap" id="stackWrap">
+    <!-- A messy pile of short letters. Click the top one and it slides
+         underneath, revealing the next. Duplicate the whole .letter block
+         to add more — JS gives each one its own scattered tilt. -->
+
+    <div class="letter"><p>I never told you how much that day meant to me. There are moments I still replay in my head — the small ones, the ones that probably meant nothing to anyone else, but they've stayed with me anyway. I think that's what I miss most: not one big thing, just all the little ones stacked together, one after another, quietly.</p></div>
+    <div class="letter"><p>Narealize ko, sobrang laki ng jealous/overthink issues ko. like kapag may nakita akong something ioover-analyze ko yon tapos mag overthink ako, maaapektuhan na pakikipag communicate ko at magiging dry/cold response ko sa tao, ewan ko ba, sobrang territorial ko when it comes to that person i love, hindi ko mapigilan hindi magselos hindi sa wala akong tiwala sayo, mayroon pero sa ibang person na nakapaligid sayo wala na hindi ko kilala. pero kadalasan na m-misunderstood ito, kaya i end up overthinking alone and cry. like sorry, i am just terrified and scared to lose you. i trust you okay but sometimes hindi naman talaga maiwasan ang mag overthink dahil mahal kita and i'm afraid to lose you eh i'm sorry.</p></div>
+    <div class="letter"><p>If loving me was so hard and draining, I'm truly sorry for all the weight I added. I know I,m not the easiest to understand. I regret all of the moments I've made it more difficult for you. I'm full of flaws and I'm full of contradictions. I'm sorry for the times I've tested you, I'm sorry for the stress I've caused and the exhaustion I've caused you. Please just know I never meant to cause any of it yet, I hope you see the love I was trying to give you, I'm sorry if loving me felt like a burden. With that said, I want you to know, even though it was hard I cherished every bit of love you've given me, and I'll always be endlessly grateful for you. I'm sorry, Chanyan.</p></div>
+    <div class="letter"><p>All I want is to make you happy and remind you that you're never alone. I want you to feel safe with me, loved, and comfortable enough to be yourself. On the days when things feel heavy and your eyes fill with tears, I want you to know you can always come to me. I'll be here to hold you and stay with you until things feel a little better. I love you on your best days and on your hardest ones too, and nothing will ever change that.
+
+What we have is real and rare, the kind of love that people don't find easily. You mean so much to me-more than words can really explain. I'm here, and I'll keep choosing you every single day. I'm not going anywhere. Being with you feels like home to me. You're my safe place and the love of my life. When I say I'd do anything for you, I truly mean it. I love you now, and I'll love you always. No matter what comes our way, I believe we'll be okay as long as we keep choosing each other.
+     
+And I will always choose you.</p></div>
+    <div class="letter"><p>From your side and mine, we were both hurting in the end.
+
+You believed I never understood you, while I felt like I never truly mattered to you.
+
+We became so consumed by our pride that we forgot our hearts were paying the price.
+
+Even in the silence, we were both falling apart.
+
+It was never about who was right-it was about who was willing to let go of their ego first.
+
+By the time we realized it, all we had left were the scars we unknowingly gave each other.</p></div>
+    <div class="letter">Alam kong marami na akong kasalanan sayo, sana mapatawad mo ako. May mga panahon talaga na kahit anong hirap ng nasa daan natin sana piliin parin nating manatili at lumaban. Wag mo sana kakalimutan lahat ng masasayang alaala nating magkasama dahil sa isang away natin, mahal na mahal kita alam mo yan. Marami na akong magagandang alaala kasama na ikaw lang nagparanas sakin kaya maraming salamat at dumating ka sa buhay ko, wala akong pinagsisihan sa mga yon. Sobrang saya ko noon na natuloy akong mag ojt sa dito sa baguio kasi alam kong mapapalapit ako sayo, pinilit ko talaga yon at wala akong regrets doon kasi andami nating nasubukan at pinagdaanan na dito lang natin naranasan kaya sana naging masaya ka sa mga gala, biglaang aya kumain sa labas ng gabi, yung rides natin gamit yung motor ni adrian hahaha, yung paghatid at sundo ko sayo, yung jogging natin kahit dalawang araw lang, yung spa natin na nakakagaan ng katawan, yung mcdo at jollibee natin, at yung pagpunta mo sa dorm don sigurado madami tayong nagawa alam mo naman na yon syempre pati na rin yung pagluluto ko para sayo sana na enjoy mo lahat. Hindi ko alam kung kailan mo mababasa to, pwedeng wala na ako sa baguio or sa special na araw para satin pero habang andito palang ako sa baguio gusto ko na sabihin sayo na wala ng mas hihigit pa sayo kahit madalas tayong magaway habang andito pa ako, hindi kita susukuan kahit na ano pang pagsubok ang harapin natin, ipaglalaban kita. Sana sa mga huling linggo o araw ko dito maging sulit kasi ayaw ko namang umuwing nagluluksa kaya gagawa ako ng paraan para maging memorable ang last week ko dito hehe. Ayun lang naman, mag iingat ka palagi pag wala na ako dito ah kapag malayo na ulit ako wag na wag mong papabayaan sarili mo, i love you so much!  <p></p></div>
+    <div class="letter"><p>You talk about the pain I caused you, but never about the pain that changed me into this version of myself.
+
+I kept understanding you, forgiving you, and making excuses for the things that hurt me, while slowly losing pieces of who I used to be. I stayed quiet when I wanted to speak, swallowed my feelings just to keep the peace, and kept choosing to understand you even when no one was trying to understand me.
+
+Maybe you only see how distant I became, how cold I started to seem, how I stopped expressing things the way I used to. But you never saw what happened inside me before I became this way.
+
+I didn't become distant for no reason. I became this way because I got tired of being hurt, tired of explaining what I needed, and tired of feeling like my feelings were always too much.
+
+I know I made mistakes. I know I hurt you too, and I'm not denying that. But I wish you could understand that some parts of mẹ changed because I was hurting too.
+
+You remember the version of me that hurt you, but I remember the version of me that kept trying until there was almost nothing left of her to give.</p></div>
+
+  </div>
+
+  <a class="back-link" href="index.html">← back to the letter</a>
+</main>
+
+<script>
+  const photoGallery = document.getElementById('gallery');
+
+  // ---------- flip-card photos ----------
+  photoGallery.addEventListener('click', event => {
+    const box = event.target.closest('.box');
+    if(box) box.classList.toggle('flipped');
+  });
+
+  // ---------- messy stacked letters ----------
+  const stackWrap = document.getElementById('stackWrap');
+  const letters = Array.from(stackWrap.children);
+  const n = letters.length;
+
+  // give every letter its own fixed scattered position/tilt, like tossed on a table
+  const jitter = letters.map((_, i) => {
+    const seed = i * 137.5; // spread values out
+    const angle = ((seed % 8) - 4);                    // -4..4 deg (slight, still readable)
+    const dx = (((seed * 1.7) % 30) - 15);             // -15..15 px
+    const dy = (((seed * 2.3) % 22) - 11);             // -11..11 px
+    return { angle, dx, dy };
+  });
+
+  let order = letters.map((_, i) => i); // order[0] is the current top letter
+
+  function render(){
+    order.forEach((letterIndex, stackPos) => {
+      const el = letters[letterIndex];
+      const { angle, dx, dy } = jitter[letterIndex];
+      el.style.zIndex = n - stackPos;
+      el.style.transform = `translate(${dx}px, ${dy}px) rotate(${angle}deg)`;
+    });
+  }
+  render();
+
+  function cycleTop(){
+    const topIndex = order[0];
+    const topEl = letters[topIndex];
+
+    // lift the top letter up and slide it away, then tuck it to the bottom
+    topEl.classList.add('lifting');
+    const { angle, dx, dy } = jitter[topIndex];
+    topEl.style.transform = `translate(${dx}px, ${dy + 60}px) rotate(${angle * 0.4}deg) scale(0.94)`;
+    topEl.style.zIndex = n + 5;
+
+    setTimeout(() => {
+      order.push(order.shift());
+      topEl.classList.remove('lifting');
+      render();
+    }, 320);
+  }
+
+  stackWrap.addEventListener('click', e => {
+    cycleTop();
+  });
+</script>
+
+</body>
+</html>

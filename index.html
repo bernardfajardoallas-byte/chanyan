@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I'm Sorry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:        #d9edfb;
+    --sky-mid:    #8fc5ea;
+    --sky-deep:   #2f6690;
+    --sky-ink:    #1c3d54;
+    --paper:      #fdfdfb;
+    --shadow:     rgba(28,61,84,0.22);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background: var(--sky);
+    font-family:'Work Sans', sans-serif;
+    color:var(--sky-ink);
+  }
+
+  main{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  body.page-leaving main{
+    opacity:0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  /* ---------- stage: envelope + letter share this space ---------- */
+  .stage{
+    position:relative;
+    width:min(92vw, 560px);
+  }
+
+  .envelope{
+    position:relative;
+    width:100%;
+    aspect-ratio: 560/360;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .env-body{
+    position:absolute;
+    inset:0;
+    background: linear-gradient(160deg, #ffffff, var(--sky));
+    border-radius:10px;
+    box-shadow: 0 30px 60px -20px var(--shadow), 0 10px 20px -10px var(--shadow);
+    transition: opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s;
+  }
+
+  .env-body::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border:1px solid rgba(47,102,144,0.18);
+    border-radius:10px;
+    pointer-events:none;
+  }
+
+  .env-pocket{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:0;
+    border-left: 280px solid transparent;
+    border-right: 280px solid transparent;
+    border-bottom: 190px solid var(--sky-mid);
+    width:0;
+    margin:0 auto;
+    z-index:3;
+    opacity: 0.9;
+    filter: drop-shadow(0 -2px 3px rgba(47,102,144,0.10));
+    transition: opacity 0.6s ease 0.5s;
+  }
+
+  .env-flap{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:0;
+    border-left: 280px solid transparent;
+    border-right: 280px solid transparent;
+    border-top: 190px solid var(--sky-mid);
+    width:0;
+    margin:0 auto;
+    transform-origin: top center;
+    transition: transform 0.9s cubic-bezier(.6,.1,.3,1);
+    z-index:6;
+    filter: drop-shadow(0 4px 6px rgba(47,102,144,0.15));
+  }
+
+  .envelope.open .env-flap{
+    transform: rotateX(180deg);
+    z-index:1;
+  }
+
+  .envelope.open .env-body,
+  .envelope.open .env-pocket{
+    opacity: 0.55;
+  }
+
+  .seal{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--sky-deep), #1c4f70 70%);
+    box-shadow: 0 6px 14px rgba(28,61,84,0.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--sky);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.3rem;
+    z-index:7;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .envelope.open .seal{
+    opacity:0;
+    transform: translate(-50%,-50%) scale(0.4);
+    pointer-events:none;
+  }
+
+  /* ---------- letter: starts tucked inside the envelope, pops up out of it ---------- */
+  .letter-card{
+    position:absolute;
+    left:50%;
+    top: 50%;
+    width: 86%;
+    max-height: min(72vh, 460px);
+    overflow-y: auto;
+    background: var(--paper);
+    border-radius: 4px;
+    padding: clamp(28px, 5vw, 56px) clamp(24px, 6vw, 50px);
+    box-shadow: 0 40px 80px -30px var(--shadow), 0 2px 0 rgba(255,255,255,0.6) inset;
+    transform: translate(-50%, -50%) scale(0.32);
+    transform-origin: center center;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    cursor: pointer;
+    transition: transform 1s cubic-bezier(.2,.75,.25,1) 0.25s, opacity 0.6s ease 0.25s, z-index 0s 0.25s;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sky-mid) transparent;
+  }
+
+  .letter-card::-webkit-scrollbar{ width: 8px; }
+  .letter-card::-webkit-scrollbar-thumb{ background: var(--sky-mid); border-radius: 8px; }
+  .letter-card::-webkit-scrollbar-track{ background: transparent; }
+
+  .letter-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:6px;
+    background: linear-gradient(90deg, var(--sky-mid), var(--sky-deep), var(--sky-mid));
+  }
+
+  .letter-card.show{
+    opacity: 1;
+    transform: translate(-50%, -62%) scale(1);
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .letter-greeting{
+    font-family:'Fraunces', serif;
+    font-size: clamp(1.4rem, 3.4vw, 1.8rem);
+    color: var(--sky-deep);
+    margin: 0 0 22px;
+  }
+
+  .letter-body p{
+    font-family:'Fraunces', serif;
+    font-weight:300;
+    font-size: clamp(1.02rem, 2.4vw, 1.14rem);
+    line-height: 1.85;
+    color:#2a4a5f;
+    margin: 0 0 20px;
+  }
+
+  .letter-body .accent{
+    font-style: italic;
+    color: var(--sky-deep);
+  }
+
+  .signature{
+    margin-top: 36px;
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--sky-deep);
+    position:relative;
+    display:inline-block;
+  }
+
+  .signature::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-6px;
+    height:2px;
+    width:0;
+    background: var(--sky-mid);
+    transition: width 1.1s ease 1s;
+  }
+
+  .letter-card.show .signature::after{
+    width:100%;
+  }
+
+  .postscript{
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--sky);
+    font-size: 0.92rem;
+    color: var(--sky-deep);
+    opacity:0.85;
+  }
+
+  @media (max-width: 480px){
+    .env-body{ border-radius:8px; }
+    .letter-card{ padding: 26px 20px; width: 92%; max-height: 68vh; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <div class="stage">
+    <div class="envelope" id="envelope" role="button" tabindex="0" aria-expanded="false" aria-label="Open the letter">
+      <div class="env-body"></div>
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="seal">H</div>
+    </div>
+
+    <article class="letter-card" id="letterCard" role="button" tabindex="0" aria-label="Close the letter">
+      <p class="letter-greeting">Dear you,</p>
+      <div class="letter-body">
+        <p>I've started this letter more times than I can count, and every version felt too small for what I actually need to say. So I'll just say it plainly: <span class="accent">I'm sorry.</span> Not the quick kind of sorry we toss around to smooth things over, but the kind that comes from actually sitting with what I did and how it landed on you.</p>
+        <p>I know my words hurt you, and I know that no explanation changes that. I was careless with something that mattered — with <em>you</em> — and you deserved better from me. I keep replaying it, wishing I'd chosen differently, wishing I'd thought before I acted instead of after.</p>
+        <p>You don't owe me your forgiveness, and I'm not writing this to rush you toward it. I just wanted you to know that I see what I did, I understand why it hurt, and I'm not asking you to pretend it didn't happen. I'm only asking for the chance to do better — to show you, not just tell you.</p>
+        <p>Whatever you decide, please know this: you matter to me, more than I showed in that moment. I hope, in time, there's room for us to find our way back to each other.</p>
+      </div>
+      <p class="signature">With love and regret, Me</p>
+      <p class="postscript">P.S. — Take whatever time you need. I'll be here when you're ready.</p>
+    </article>
+  </div>
+</main>
+
+
+<script>
+  const envelope = document.getElementById('envelope');
+  const letterCard = document.getElementById('letterCard');
+  let isClosing = false;
+
+  function openEnvelope(){
+    if(envelope.classList.contains('open')) return;
+    envelope.classList.add('open');
+    envelope.setAttribute('aria-expanded','true');
+    letterCard.classList.add('show');
+    setTimeout(() => {
+      letterCard.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 700);
+  }
+
+  function closeEnvelope(){
+    if(!envelope.classList.contains('open') || isClosing) return;
+    isClosing = true;
+    letterCard.classList.remove('show');
+    setTimeout(() => {
+      envelope.classList.remove('open');
+      envelope.setAttribute('aria-expanded','false');
+      setTimeout(() => {
+        document.body.classList.add('page-leaving');
+        setTimeout(() => {
+          window.location.href = 'letter.html';
+        }, 900);
+      }, 900);
+    }, 300);
+  }
+
+  envelope.addEventListener('click', openEnvelope);
+  envelope.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      openEnvelope();
+    }
+  });
+
+  letterCard.addEventListener('click', closeEnvelope);
+  letterCard.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      closeEnvelope();
+    }
+  });
+
+</script>
+
+</body>
+</html>
