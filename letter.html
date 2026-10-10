@@ -29,7 +29,7 @@
   main{
     max-width: 1000px;
     margin: 0 auto;
-    padding: 36px 24px 80px;
+    padding: clamp(24px, 5vw, 36px) clamp(16px, 4vw, 24px) 80px;
     opacity: 0;
     animation: rise 0.8s ease forwards 0.1s;
   }
@@ -50,7 +50,7 @@
   }
 
   .video-container{
-    width:min(100%, 430px, calc(50vh - 12px));
+    width:min(100%, 430px);
     aspect-ratio:9 / 16;
     margin:0 auto 40px;
     overflow:hidden;
@@ -129,8 +129,8 @@
   /* ---------- photo gallery: click a box to flip it ---------- */
   .gallery{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px 22px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 3vw, 30px) clamp(12px, 2.2vw, 22px);
   }
 
   @media (max-width: 780px){
@@ -216,8 +216,8 @@
   /* ---------- messy stack of letters ---------- */
   .stack-wrap{
     position: relative;
-    max-width: 380px;
-    height: 290px;
+    width: min(100%, 380px);
+    height: clamp(240px, 72vw, 290px);
     margin: 0 auto;
     user-select: none;
   }
@@ -226,39 +226,33 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 320px;
-    height: 210px;
-    margin: -105px 0 0 -160px;
+    width: min(320px, calc(100% - 24px));
+    height: clamp(170px, 58vw, 210px);
+    margin: 0;
     background: var(--paper);
     border-radius: 6px;
     box-shadow: 0 14px 26px -12px var(--shadow);
-    padding: 22px 24px;
+    padding: clamp(14px, 5vw, 22px) clamp(14px, 6vw, 24px);
     box-sizing: border-box;
     cursor: pointer;
     overflow-y: auto;
-    transition: transform 0.45s cubic-bezier(.3,.6,.3,1), box-shadow 0.3s ease;
-    scrollbar-width: thin;
-    scrollbar-color: var(--sky-mid) transparent;
-  }
-  
-  @media (max-width: 375px){
-    .letter{
-      width: calc(100vw - 56px);
-      margin-left: calc((56px - 100vw) / 2);
-    }
-  }
-
-  .letter::-webkit-scrollbar{ width: 6px; }
-  .letter::-webkit-scrollbar-thumb{ background: var(--sky-mid); border-radius: 6px; }
-  .letter::-webkit-scrollbar-track{ background: transparent; }
-
-  .letter p{
     font-family:'Fraunces', serif;
     font-style: italic;
     font-weight: 400;
     font-size: 0.98rem;
     line-height: 1.65;
     color: #2a4a5f;
+    transform: translate(-50%, -50%) translate(var(--offset-x, 0px), var(--offset-y, 0px)) rotate(var(--rotation, 0deg)) scale(var(--scale, 1));
+    transition: transform 0.45s cubic-bezier(.3,.6,.3,1), box-shadow 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sky-mid) transparent;
+  }
+  
+  .letter::-webkit-scrollbar{ width: 6px; }
+  .letter::-webkit-scrollbar-thumb{ background: var(--sky-mid); border-radius: 6px; }
+  .letter::-webkit-scrollbar-track{ background: transparent; }
+
+  .letter p{
     margin: 0;
   }
 
@@ -302,7 +296,7 @@
     <h2 id="music-title">Song for You</h2>
     <div class="music-box">
       <iframe
-        src="https://www.youtube.com/embed/8hJJ2l8UaxQ"
+        src="https://www.youtube.com/embed/z7PHz-7SbJ8"
         title="Song for You"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin"
@@ -430,7 +424,7 @@ Even in the silence, we were both falling apart.
 It was never about who was right-it was about who was willing to let go of their ego first.
 
 By the time we realized it, all we had left were the scars we unknowingly gave each other.</p></div>
-    <div class="letter">Alam kong marami na akong kasalanan sayo, sana mapatawad mo ako. May mga panahon talaga na kahit anong hirap ng nasa daan natin sana piliin parin nating manatili at lumaban. Wag mo sana kakalimutan lahat ng masasayang alaala nating magkasama dahil sa isang away natin, mahal na mahal kita alam mo yan. Marami na akong magagandang alaala kasama na ikaw lang nagparanas sakin kaya maraming salamat at dumating ka sa buhay ko, wala akong pinagsisihan sa mga yon. Sobrang saya ko noon na natuloy akong mag ojt sa dito sa baguio kasi alam kong mapapalapit ako sayo, pinilit ko talaga yon at wala akong regrets doon kasi andami nating nasubukan at pinagdaanan na dito lang natin naranasan kaya sana naging masaya ka sa mga gala, biglaang aya kumain sa labas ng gabi, yung rides natin gamit yung motor ni adrian hahaha, yung paghatid at sundo ko sayo, yung jogging natin kahit dalawang araw lang, yung spa natin na nakakagaan ng katawan, yung mcdo at jollibee natin, at yung pagpunta mo sa dorm don sigurado madami tayong nagawa alam mo naman na yon syempre pati na rin yung pagluluto ko para sayo sana na enjoy mo lahat. Hindi ko alam kung kailan mo mababasa to, pwedeng wala na ako sa baguio or sa special na araw para satin pero habang andito palang ako sa baguio gusto ko na sabihin sayo na wala ng mas hihigit pa sayo kahit madalas tayong magaway habang andito pa ako, hindi kita susukuan kahit na ano pang pagsubok ang harapin natin, ipaglalaban kita. Sana sa mga huling linggo o araw ko dito maging sulit kasi ayaw ko namang umuwing nagluluksa kaya gagawa ako ng paraan para maging memorable ang last week ko dito hehe. Ayun lang naman, mag iingat ka palagi pag wala na ako dito ah kapag malayo na ulit ako wag na wag mong papabayaan sarili mo, i love you so much!  <p></p></div>
+    <div class="letter">Alam kong marami na akong kasalanan sayo, sana mapatawad mo ako. May mga panahon talaga na kahit anong hirap ng nasa daan natin sana piliin parin nating manatili at lumaban. Wag mo sana kakalimutan lahat ng masasayang alaala nating magkasama dahil sa isang away lang natin, mahal na mahal kita alam mo yan, ikaw ang dulo, gitna't simula ko. Marami na akong magagandang alaala kasama na ikaw lang nagparanas sakin kaya maraming salamat at dumating ka sa buhay ko, wala akong pinagsisihan sa mga yon. Sobrang saya ko noon na natuloy akong mag ojt sa dito sa baguio kasi alam kong mapapalapit ako sayo, pinilit ko talaga yon at wala akong regrets doon kasi andami nating nasubukan at pinagdaanan na dito lang natin naranasan kaya sana naging masaya ka sa mga gala, biglaang aya kumain sa labas ng gabi, yung rides natin gamit yung motor ni adrian hahaha, yung paghatid at sundo ko sayo, yung jogging natin kahit dalawang araw lang, yung spa natin na nakakagaan ng katawan, yung mcdo at jollibee natin, at yung pagpunta mo sa dorm don sigurado madami tayong nagawa alam mo naman na yon syempre pati na rin yung pagluluto ko para sayo sana na enjoy mo lahat. Hindi ko alam kung kailan mo mababasa to, pwedeng wala na ako sa baguio or sa special na araw para satin pero habang andito palang ako sa baguio gusto ko na sabihin sayo na wala ng mas hihigit pa sayo kahit madalas tayong magaway habang andito pa ako, hindi kita susukuan kahit na ano pang pagsubok ang harapin natin, ipaglalaban kita. Sana sa mga huling linggo o araw ko dito maging sulit kasi ayaw ko namang umuwing nagluluksa kaya gagawa ako ng paraan para maging memorable ang last week ko dito hehe. Ayun lang naman, mag iingat ka palagi pag wala na ako dito ah kapag malayo na ulit ako wag na wag mong papabayaan sarili mo, i love you so much!  <p></p></div>
     <div class="letter"><p>You talk about the pain I caused you, but never about the pain that changed me into this version of myself.
 
 I kept understanding you, forgiving you, and making excuses for the things that hurt me, while slowly losing pieces of who I used to be. I stayed quiet when I wanted to speak, swallowed my feelings just to keep the peace, and kept choosing to understand you even when no one was trying to understand me.
@@ -478,7 +472,10 @@ You remember the version of me that hurt you, but I remember the version of me t
       const el = letters[letterIndex];
       const { angle, dx, dy } = jitter[letterIndex];
       el.style.zIndex = n - stackPos;
-      el.style.transform = `translate(${dx}px, ${dy}px) rotate(${angle}deg)`;
+      el.style.setProperty('--offset-x', `${dx}px`);
+      el.style.setProperty('--offset-y', `${dy}px`);
+      el.style.setProperty('--rotation', `${angle}deg`);
+      el.style.setProperty('--scale', '1');
     });
   }
   render();
@@ -490,7 +487,9 @@ You remember the version of me that hurt you, but I remember the version of me t
     // lift the top letter up and slide it away, then tuck it to the bottom
     topEl.classList.add('lifting');
     const { angle, dx, dy } = jitter[topIndex];
-    topEl.style.transform = `translate(${dx}px, ${dy + 60}px) rotate(${angle * 0.4}deg) scale(0.94)`;
+    topEl.style.setProperty('--offset-y', `${dy + 60}px`);
+    topEl.style.setProperty('--rotation', `${angle * 0.4}deg`);
+    topEl.style.setProperty('--scale', '0.94');
     topEl.style.zIndex = n + 5;
 
     setTimeout(() => {

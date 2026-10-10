@@ -28,10 +28,11 @@
 
   main{
     min-height:100vh;
+    min-height:100svh;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding: 20px;
+    padding: clamp(12px, 4vw, 24px);
     transition: opacity 0.9s ease, transform 0.9s ease;
   }
 
@@ -75,12 +76,10 @@
   .env-pocket{
     position:absolute;
     left:0; right:0; bottom:0;
-    height:0;
-    border-left: 280px solid transparent;
-    border-right: 280px solid transparent;
-    border-bottom: 190px solid var(--sky-mid);
-    width:0;
-    margin:0 auto;
+    width:100%;
+    height:53%;
+    background:var(--sky-mid);
+    clip-path:polygon(0 100%, 100% 100%, 50% 0);
     z-index:3;
     opacity: 0.9;
     filter: drop-shadow(0 -2px 3px rgba(47,102,144,0.10));
@@ -90,12 +89,10 @@
   .env-flap{
     position:absolute;
     top:0; left:0; right:0;
-    height:0;
-    border-left: 280px solid transparent;
-    border-right: 280px solid transparent;
-    border-top: 190px solid var(--sky-mid);
-    width:0;
-    margin:0 auto;
+    width:100%;
+    height:53%;
+    background:var(--sky-mid);
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
     transform-origin: top center;
     transition: transform 0.9s cubic-bezier(.6,.1,.3,1);
     z-index:6;
@@ -146,6 +143,7 @@
     top: 50%;
     width: 86%;
     max-height: min(72vh, 460px);
+    max-height: min(72svh, 460px);
     overflow-y: auto;
     background: var(--paper);
     border-radius: 4px;
@@ -239,7 +237,7 @@
 
   @media (max-width: 480px){
     .env-body{ border-radius:8px; }
-    .letter-card{ padding: 26px 20px; width: 92%; max-height: 68vh; }
+    .letter-card{ padding: clamp(20px, 6vw, 26px) clamp(16px, 5vw, 20px); width: 92%; max-height: 68vh; max-height: 68svh; }
   }
 </style>
 </head>
@@ -255,15 +253,14 @@
     </div>
 
     <article class="letter-card" id="letterCard" role="button" tabindex="0" aria-label="Close the letter">
-      <p class="letter-greeting">Dear you,</p>
+      <p class="letter-greeting">Dear Hope,</p>
       <div class="letter-body">
-        <p>I've started this letter more times than I can count, and every version felt too small for what I actually need to say. So I'll just say it plainly: <span class="accent">I'm sorry.</span> Not the quick kind of sorry we toss around to smooth things over, but the kind that comes from actually sitting with what I did and how it landed on you.</p>
-        <p>I know my words hurt you, and I know that no explanation changes that. I was careless with something that mattered — with <em>you</em> — and you deserved better from me. I keep replaying it, wishing I'd chosen differently, wishing I'd thought before I acted instead of after.</p>
+        <p>I've started this letter more times than I can count, and every version felt too small for what I actually need to say. So I'll just say it plainly: I'm sorry. Not the quick kind of sorry we toss around to smooth things over, but the kind that comes from actually sitting with what I did and how it landed on you.</p>
+        <p>I know my words hurt you, and I know that no explanation changes that. I was careless with something that mattered — with you — and you deserved better from me. I keep replaying it, wishing I'd chosen differently, wishing I'd thought before I acted instead of being mad and mawala sa mood tapos nasasabayan na kita.</p>
         <p>You don't owe me your forgiveness, and I'm not writing this to rush you toward it. I just wanted you to know that I see what I did, I understand why it hurt, and I'm not asking you to pretend it didn't happen. I'm only asking for the chance to do better — to show you, not just tell you.</p>
         <p>Whatever you decide, please know this: you matter to me, more than I showed in that moment. I hope, in time, there's room for us to find our way back to each other.</p>
       </div>
       <p class="signature">With love and regret, Me</p>
-      <p class="postscript">P.S. — Take whatever time you need. I'll be here when you're ready.</p>
     </article>
   </div>
 </main>
